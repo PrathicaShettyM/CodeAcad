@@ -17,3 +17,27 @@ npm i
 ```
 npm run dev
 ```
+
+### Setting up tailwindcss in your project
+[Link](https://tailwindcss.com/docs/guides/vite)
+1. Install tailwind and other dependencies 
+```
+npm install -D tailwindcss postcss autoprefixer
+```
+2. Create the tailwind.config.js file
+```
+ npx tailwindcss init -p
+```
+3. Add the files and extensions to the tailwind config in the content property
+```
+  content: [
+    "./index.html",
+    "./src/**/*.{is,ts,jsx,tsx}"
+],
+```
+4. Add the tailwind directives on the top of `index.css` file 
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
