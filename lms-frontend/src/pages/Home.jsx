@@ -18,7 +18,7 @@ function Home(){
                             <button className="bg-yellow-500 px-5 py-3 rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-400 transition-all ease-in-out duration-300">Explore courses</button>
                         </Link>
                         <Link to="/contact">
-                            <button className="border-2 border-bg-yellow-500 px-5 py-3 rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-400 transition-all ease-in-out duration-300">Explore courses</button>
+                            <button className="border-2 border-bg-yellow-500 px-5 py-3 rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-400 transition-all ease-in-out duration-300">Contact Us</button>
                         </Link>
                     </div>
                 </div>
