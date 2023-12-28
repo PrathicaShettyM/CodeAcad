@@ -1,9 +1,9 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
+import axiosInstance from "../config/axiosInstance";
 import { isEmail } from "../helper/regexMatcher";
 import HomeLayout from "../layout/HomeLayout";
-import axiosInstance from "../config/axiosInstance";
 
 function Contact(){
 
