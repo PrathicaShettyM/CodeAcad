@@ -30,9 +30,10 @@ function CourseCard({ data }){
                     <p className="font-semibold">
                         Instructor: <span className="font-bold text-teal-700">{data?.createdBy}</span>
                     </p>
+                    
                     <p className="font-semibold">
-                    Total Lectures: <span className="font-bold text-teal-700">{data?.numberOfLectures}</span>
-                </p>
+                        Total Lectures: <span className="font-bold text-teal-700">{data?.numberOfLectures}</span>
+                    </p>
                 </div>
             </div>
         </div>

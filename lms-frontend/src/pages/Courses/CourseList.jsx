@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import CourseCard from "../../components/CourseCard";
 import HomeLayout from "../../layout/HomeLayout";
 import { getAllCourses } from "../../redux/slices/courseSlices";
-import CourseCard from "../../components/CourseCard";
 
 function CourseList(){
 
@@ -32,8 +32,6 @@ function CourseList(){
                 })}
                 </div>
             </div>
-
-            
         </HomeLayout>
     )
 }
