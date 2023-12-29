@@ -4,6 +4,8 @@ import { Route,Routes } from "react-router-dom";
 
 import Aboutus from './pages/Aboutus';
 import Contact from './pages/Contact';
+import CourseDescription from './pages/Courses/CourseDescription';
+import CourseList from './pages/Courses/CourseList';
 import Denied from './pages/Denied';
 import Home from './pages/Home';
 import Notfound from './pages/Notfound';
@@ -20,6 +22,8 @@ function App() {
       <Route path='/signin' element={<Signin/>}/>
       <Route path='/contactus' element={<Contact/>}/>
       <Route path='/denied' element={<Denied/>}/>
+      <Route path='/courses' element={<CourseList/>}/>
+      <Route path='/course/description' element={<CourseDescription/>}/>
       <Route path='*' element={<Notfound/>}/>
     </Routes>
  
