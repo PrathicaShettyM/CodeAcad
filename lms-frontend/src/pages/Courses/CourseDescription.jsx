@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import HomeLayout from "../../layout/HomeLayout";
 
 function CourseDescription(){
