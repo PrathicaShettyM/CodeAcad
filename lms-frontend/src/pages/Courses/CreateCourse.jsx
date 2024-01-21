@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../../layout/HomeLayout";
-import createNewCourse from "../../redux/slices/courseSlices.js"
+import {createNewCourse} from "../../redux/slices/courseSlices.js"
 
 function CreateCourse(){
 
@@ -32,8 +32,8 @@ function CreateCourse(){
                     ...userInput,
                     thumbnail: uploadedImage,
                     previewImage: this.result
-                })
-            })
+                });
+            });
         }
     }
 
@@ -42,7 +42,7 @@ function CreateCourse(){
         setUserInput({
             ...userInput,
             [name]: value
-        })
+        });
     }
 
     async function onFormSubmit(e){
@@ -53,6 +53,7 @@ function CreateCourse(){
         }
 
         const response = await dispatch(createNewCourse(userInput))
+        console.log(response);
         if(response?.payload?.success){
             setUserInput({
                 title: "",
@@ -170,7 +171,6 @@ function CreateCourse(){
                 <button
                     type="submit"
                     className="bg-green-600 py-1 rounded font-semibold text-lg cursor-pointer hover:bg-green-700 transition-all ease-in-out duration-300"
-                    
                     >Create Course</button>
                 </form>
 

@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Notfound from './pages/Notfound';
 import Signin from './pages/SignIn';
 import Signup from './pages/Signup';
+import Profile from './pages/User/Profile';
 
 function App() {
 
@@ -28,9 +29,15 @@ function App() {
       <Route path='/course/description' element={<CourseDescription/>}/>
 
       <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]}/>}>
-      
+        
+      </Route>
+      <Route path='/user/profile' element={<Profile/>}/>
+
+      <Route element={<RequireAuth allowedRoles={["ADMIN"]}/>}>
+       
       </Route>
       <Route path='/course/create' element={<CreateCourse/>}/>
+     
 
       <Route path='*' element={<Notfound/>}/>
     </Routes>
