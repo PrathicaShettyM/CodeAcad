@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Notfound from './pages/Notfound';
 import Signin from './pages/SignIn';
 import Signup from './pages/Signup';
+import EditProfile from './pages/User/EditProfile';
 import Profile from './pages/User/Profile';
 
 function App() {
@@ -20,26 +21,26 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Home/>}/>
-      <Route path='/aboutus' element={<Aboutus/>}/>
-      <Route path='/signup' element={<Signup/>}/>
-      <Route path='/signin' element={<Signin/>}/>
-      <Route path='/contactus' element={<Contact/>}/>
-      <Route path='/denied' element={<Denied/>}/>
-      <Route path='/courses' element={<CourseList/>}/>
-      <Route path='/course/description' element={<CourseDescription/>}/>
+      <Route path='/aboutus' element={<Aboutus/> }/>
+      <Route path='/signup' element={<Signup/>} />
+      <Route path='/signin' element={<Signin/>} />
+      <Route path='/contactus' element={<Contact/>} />
+      <Route path='/denied' element={<Denied/>} />
+      <Route path='/courses' element={<CourseList />}/>
+      <Route path='/course/description' element={<CourseDescription />}/>
 
-      <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]}/>}>
-        
+      <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
+        <Route path='/user/profile' element={<Profile/>}/>
+        <Route path='/user/editprofile' element={<EditProfile/>}/>
       </Route>
-      <Route path='/user/profile' element={<Profile/>}/>
 
-      <Route element={<RequireAuth allowedRoles={["ADMIN"]}/>}>
-       
+      <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
+        <Route path='/course/create' element={<CreateCourse />}/>
       </Route>
-      <Route path='/course/create' element={<CreateCourse/>}/>
-     
 
-      <Route path='*' element={<Notfound/>}/>
+      <Route path='/contacts' element={<Contact />}/>
+      <Route path='/denied' element={<Denied />}/>
+      <Route path='*' element={<Notfound />}/>
     </Routes>
  
   )

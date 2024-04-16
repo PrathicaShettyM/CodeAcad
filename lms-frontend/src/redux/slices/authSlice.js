@@ -6,9 +6,11 @@ import axiosInstance from '../../config/axiosInstance'
 const initialState = {
     isLoggedIn : localStorage.getItem("isLoggedIn") || false,
     role: localStorage.getItem("role") || "",
-    data: JSON.parse(localStorage.getItem("data")) || {}
+    data: localStorage.getItem("data") || {}
 }
+//data: JSON.parse(localStorage.getItem("data")) || {}
 // using async thunk
+
 // sign up
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
     try {
@@ -24,6 +26,34 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
     } catch (error) {
         console.log(error);
         toast.error(error?.response?.data?.message);
+    }
+})
+
+// update user profile
+export const updateProfile = createAsyncThunk("/auth/updateProfile", async (data) => {
+    try {
+        const response = axiosInstance.put(`user/update/${data[0]}`, data[1]);
+        toast.promise(response, {
+            loading: 'Wait! updating your account',
+            success: (data)=> {
+                return data?.data?.message;
+            },
+            error: 'Failed to update your account'
+        });
+        return (await response).data;
+    } catch (error) {
+        console.log(error);
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+// get user details
+export const getUserData = createAsyncThunk("/auth/getData", async () => {
+    try {
+        const response = axiosInstance.get("/user/me");
+        return (await response).data;
+    } catch (error) {
+        toast.error(error?.message);
     }
 })
 
@@ -83,6 +113,18 @@ const authSlice = createSlice({
             state.isLoggedIn = false;
             state.role = "";
             state.data = {};
+        })
+        .addCase(getUserData.fulfilled, (state, action) => {
+            
+            if(!action?.payload?.data) return;
+
+            localStorage.setItem("data", JSON.stringify(action?.payload?.user))
+            localStorage.setItem("isLoggedIn", true)
+            localStorage.setItem("role", action?.payload?.user?.role);
+            
+            state.isLoggedIn = true;
+            state.role = action?.payload?.user?.role;
+            state.data = action?.payload?.user;
         })
     }
 })
