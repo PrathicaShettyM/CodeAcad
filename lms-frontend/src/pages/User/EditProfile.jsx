@@ -111,7 +111,7 @@ function EditProfile(){
                 />
 
                 <div className="flex flex-col gap-1">
-                    <label className="text-g font-semibold" htmlFor="fullName">
+                    <label className="text-lg font-semibold" htmlFor="fullName">
                         Full name
                     </label>
                     <input
@@ -127,8 +127,13 @@ function EditProfile(){
                 </div>
                 <button type="submit"
                 className="w-full bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 rounded-sm py-2 cursor-pointer">
-                Update profile
+                    Update profile
                 </button>
+                <Link to="/user/profile">
+                    <p className="link text-accent cursor-pointer flex items-center jsutify-center w-full gap-2">
+                        Go back to profile
+                    </p>
+                </Link>
             </form>
         </div>
         </HomeLayout>

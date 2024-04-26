@@ -54,7 +54,7 @@ function Contact(){
     }
     return(
        <HomeLayout>
-            <div className="flex items-center justify-center h-[90vh]">
+            <div className="flex items-center justify-center h-[90vh] bg-gray-800">
                 <form onSubmit={onFormSubmit} noValidate className="flex flex-col items-center justify-center gap-2 p-5 w-[22rem] rounded-md text-white border-2">
                     <h1 className="text-3xl font-semibold">Contact Us</h1>
                         <div className="flex flex-col w-full gap-1">
@@ -63,7 +63,7 @@ function Contact(){
                             </label>
                             <input
                                id="name"
-                               className="border px-2 py-1 rounded-sm  text-black"
+                               className="border px-2 py-1 rounded-sm  text-white bg-gray-800"
                                type="text"
                                placeholder="Enter your name..."
                                name="name"
@@ -78,7 +78,7 @@ function Contact(){
                             </label>
                             <input
                                id="email"
-                               className="border px-2 py-1 rounded-sm text-black"
+                               className="border px-2 py-1 rounded-sm text-white bg-gray-800"
                                type="email"
                                placeholder="Enter your email..."
                                name="email"
@@ -93,7 +93,7 @@ function Contact(){
                             </label>
                             <textarea
                                id="message"
-                               className="border px-2 py-1 rounded-sm resize-none h-40 text-black"
+                               className="border px-2 py-1 rounded-sm resize-none h-40 text-white bg-gray-800"
                                type="text"
                                placeholder="Enter your message..."
                                name="message"
