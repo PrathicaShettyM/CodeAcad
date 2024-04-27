@@ -84,7 +84,7 @@ function EditProfile(){
         <div className="flex items-center justify-center h-[90vh]">
             <form
                 onSubmit={onFormSubmit}
-                className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-80"
+                className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-80 min-h-[26rem] shadow-[0_0_10px_black]"
             >
             <h1 className="text-center text-2xl font-semibold">
                 Edit Profile
