@@ -92,8 +92,8 @@ userSchema.methods = {
             .update(resetToken)
             .digest('hex');
 
-        // set the expiry time for the token
-        this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes
+        // set the expiry time as '15 mins' for the token
+        this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000;
 
         return resetToken;
   }

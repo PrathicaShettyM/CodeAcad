@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import AppError from "../utils/appError.js";
-import asyncHandler from './asyncHandler.middleware';
+import asyncHandler from './asyncHandler.middleware.js';
 
 // 1. Middleware to check if user "is Logged in" or not
 export const isLoggedIn = asyncHandler(async (req, _res, next) => {
@@ -28,17 +28,16 @@ export const isLoggedIn = asyncHandler(async (req, _res, next) => {
 });
 
 // 2. Middleware to check if user is an "Admin" or not
-export const authorizeRoles = (...roles) => {
+export const authorizeRoles = (...roles) => 
     asyncHandler(async (req, _res, next) => {
         // If the user is not an Admin AND he doesnt have a active subscription, then throw error
-        if (req.user.role !== 'Admin' && req.user.subscription.status !== 'active') {
+        if (!roles.includes(req.user.role)) {
             return next(new AppError('You do not have permission to perform this action', 403));
         }
 
         // If user is Admin, pass on the control to the next middleware
         next();
     });
-};
 
 // 3. Middleware to check if user is a active "Subscriber" or not
 export const authorizeSubscriers = asyncHandler(async (req, _res, next) => {
