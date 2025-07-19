@@ -13,6 +13,7 @@ import DisplayLectures from './pages/Dashboard/DisplayLectures';
 import Denied from './pages/Denied';
 import Home from './pages/Home';
 import Notfound from './pages/Notfound';
+import ForgotPassword from './pages/Password/ForgetPassword';
 import Checkout from './pages/Payment/Checkout';
 import CheckoutFailure from './pages/Payment/CheckoutFailure';
 import CheckoutSuccess from './pages/Payment/CheckoutSuccess';
@@ -26,32 +27,40 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Home/>}/>
+      <Route path='/courses' element={<CourseList />}/>
+      <Route path='/contactus' element={<Contact/>} />
       <Route path='/aboutus' element={<Aboutus/> }/>
+      <Route path='/denied' element={<Denied/>} />
+
+      {/*forget password not there*/}
+      {/*reset token not there*/}
+      
+      <Route path='/forgetpassword' element={<ForgotPassword/> }/>
+      <Route path='/denied' element={<Denied/>} />
+
       <Route path='/signup' element={<Signup/>} />
       <Route path='/signin' element={<Signin/>} />
-      <Route path='/contactus' element={<Contact/>} />
-      <Route path='/denied' element={<Denied/>} />
-      <Route path='/courses' element={<CourseList />}/>
-      <Route path='/course/description' element={<CourseDescription />}/>
+      
 
       <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
-        <Route path='/user/profile' element={<Profile/>}/>
-        <Route path='/user/editprofile' element={<EditProfile/>}/>
-
+        <Route path='/course/description' element={<CourseDescription />}/>
         <Route path='/checkout' element={<Checkout />}/>
         <Route path='/checkout/success' element={<CheckoutSuccess />}/>
         <Route path='/checkout/fail' element={<CheckoutFailure />}/>
-       
+        
+        {/*change password pending*/}
+        
+        <Route path='/user/profile' element={<Profile/>}/>
+        <Route path='/user/editprofile' element={<EditProfile/>}/>
         <Route path='/course/displaylectures' element={<DisplayLectures />}/>
       </Route>
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
-        <Route path='/course/create' element={<CreateCourse />}/>
+          {/*admin dashboard pending*/}
         <Route path='/course/addlecture' element={<AddLecture/>}/>
+        <Route path='/course/create' element={<CreateCourse />}/>
       </Route>
 
-      <Route path='/contacts' element={<Contact />}/>
-      <Route path='/denied' element={<Denied />}/>
       <Route path='*' element={<Notfound />}/>
     </Routes>
  

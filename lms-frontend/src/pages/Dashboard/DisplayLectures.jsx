@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {useLocation} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import HomeLayout from "../../layout/HomeLayout";

@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 
 import axiosInstance from "../../config/axiosInstance";
 const initialState = {
-    lectures: []
-}
+    lectures: [],
+};
 
 export const getCourseLecture = createAsyncThunk("/course/lecture/get", async (cid) => {
     try {
@@ -66,5 +66,7 @@ const lectureSlice = createSlice({
         })
     }
 });
+
+export const {} = lectureSlice.actions;
 export default lectureSlice.reducer;
     
