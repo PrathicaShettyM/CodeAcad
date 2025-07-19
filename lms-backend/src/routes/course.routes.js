@@ -62,11 +62,13 @@ router.post(
 
 // ADMIN: update a course
 router.put(
-  '/:id',
+  "/:id",
   isLoggedIn,
-  authorizeRoles('ADMIN'),
-  updateCourseById
+  authorizeRoles("ADMIN"),
+  upload.single("thumbnail"),
+  updateCourseById,
 );
+
 
 //  ADMIN: remove lecture from course (NEW ROUTE)
 router.delete(
