@@ -2,7 +2,7 @@ import path from "path";
 import multer from "multer";
 import fs from "fs";
 
-// ✅ Ensure 'uploads/' folder exists
+// Ensure 'uploads/' folder exists
 const uploadDir = "uploads";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (_req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
-  const allowed = [".jpg", ".jpeg", ".webp", ".png"];
+  const allowed = [".jpg", ".jpeg", ".webp", ".png", ".mp4"];
   if (!allowed.includes(ext)) {
     return cb(new Error(`Unsupported file type! ${ext}`), false);
   }

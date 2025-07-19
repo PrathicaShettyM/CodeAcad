@@ -41,16 +41,22 @@ router.delete(
 router.get(
   '/:id',
   isLoggedIn,
-  authorizeSubscribers,
+  authorizeRoles("Subscriber", "ADMIN"),
   getLecturesByCourseId
 );
+// router.get(
+//   '/:id',
+//   isLoggedIn,
+//   authorizeSubscribers,
+//   getLecturesByCourseId
+// );
 
 // ADMIN: add a lecture to course
 router.post(
   '/:id',
   isLoggedIn,
   authorizeRoles('ADMIN'),
-  upload.single('lecture'),
+  upload.single('file'),
   addLectureToCourseById
 );
 

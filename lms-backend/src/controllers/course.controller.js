@@ -46,7 +46,7 @@ export const createCourse = asyncHandler(async (req, res, next) => {
         return next(new AppError('Image upload failed. Try again.', 500));
     }
 
-    // ✅ Now create course AFTER image is uploaded
+    // Now create course AFTER image is uploaded
     const course = await Course.create({
         title,
         category,
@@ -92,44 +92,51 @@ export const getLecturesByCourseId = asyncHandler(async (req, res, next) => {
        This goes as POST: {{URL}}/api/v1/courses/:id
 */
 export const addLectureToCourseById = asyncHandler(async (req, res, next) => {
-    const {title, description} = req.body;
-    const {id} = req.params;
-
-    let lectureData = {};
+    const { title, description } = req.body;
+    const { id } = req.params;
 
     if (!title || !description) {
-        return next(new AppError('Title and Description are required', 400));
+        return next(new AppError("Title and Description are required", 400));
     }
 
     const course = await Course.findById(id);
-
     if (!course) {
-        return next(new AppError('Invalid course id or course not found.', 400));
+        return next(new AppError("Invalid course ID or course not found.", 404));
     }
 
+    const lectureData = {};
+
+    // Check and upload lecture video if provided
     if (req.file) {
         try {
             const result = await cloudinary.v2.uploader.upload(req.file.path, {
-                folder: 'code_acad',
-                chunk_size: 50000000,
-                resource_type: 'video',
+                folder: "code_acad",
+                resource_type: "video",
+                chunk_size: 6000000, // Optional: for large video files
             });
 
-            if(result){
-                lectureData.public_id = result.public_id;
-                lectureData.secure_url = result.secure_url;
-            }
+            lectureData.public_id = result.public_id;
+            lectureData.secure_url = result.secure_url;
 
-            await fs.rm(`uploads/${req.file.filename}`, { force: true });
+            // Delete local file after upload
+            await fs.rm(req.file.path, { force: true });
         } catch (error) {
-            for (const file of await fs.readdir('uploads/')){
-                await fs.unlink(path.join('uploads/', file));
+            console.error("Cloudinary Upload Error:", error);
+            // Cleanup uploads folder on failure
+            const allFiles = await fs.readdir("uploads/");
+            for (const file of allFiles) {
+                await fs.unlink(path.join("uploads/", file));
             }
 
-            return next(new AppError(JSON.stringify(error) || 'File not uploaded, please try again', 400));
+            return next(
+                new AppError("Failed to upload lecture video. Try again.", 500)
+            );
         }
+    } else {
+        return next(new AppError("Lecture video file is required", 400));
     }
 
+    // Push new lecture to course
     course.lectures.push({
         title,
         description,
@@ -141,7 +148,7 @@ export const addLectureToCourseById = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        message: 'Course Lecture added successfully',
+        message: "Course lecture added successfully",
         course,
     });
 });
@@ -151,7 +158,7 @@ export const addLectureToCourseById = asyncHandler(async (req, res, next) => {
        This goes as DELETE: {{URL}}/api/v1/courses/:courseId/lectures/:lectureId
 */
 export const removeLectureFromCourse = asyncHandler(async (req, res, next) => {
-    const { courseId, lectureId } = req.query;
+    const { courseId, lectureId } = req.params;
 
     if (!courseId) {
         return next(new AppError('Course ID is required', 400));
@@ -226,7 +233,7 @@ export const deleteCourseById = asyncHandler(async (req, res, next) => {
         return next(new AppError('Course with given id does not exist.', 404));
     }
 
-    await course.remove();
+    await Course.findByIdAndDelete(id);
 
     res.status(200).json({
         success: true,
