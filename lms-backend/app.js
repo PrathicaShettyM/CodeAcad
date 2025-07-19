@@ -23,13 +23,15 @@ app.use(cookieParser());
 // import all routes
 import userRoutes from './src/routes/user.routes.js';
 import miscRoutes from './src/routes/miscellaneous.routes.js';
-
+import courseRoutes from './src/routes/course.routes.js';
+// import paymentRoutes from './src/routes/payment.routes.js';
 
 
 // use all routes
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1', miscRoutes);
-
+app.use('/api/v1/courses', courseRoutes);
+// app.use('/api/v1/payments', paymentRoutes);
 
 app.use(errorMiddleware);
 
