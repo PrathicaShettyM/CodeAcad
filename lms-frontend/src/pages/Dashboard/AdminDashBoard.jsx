@@ -18,10 +18,10 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import Layout from "../../Layout/Layout";
-import { deleteCourse, getAllCourses } from "../../Redux/courseSlice";
-import { getPaymentRecord } from "../../Redux/razorpaySlice";
-import { getStatsData } from "../../Redux/statSlice";
+import Layout from "../../layout/HomeLayout";
+import { deleteCourse, getAllCourses } from "../../redux/slices/courseSlice";
+import { getPaymentRecord } from "../../redux/slices/razorPaySlice";
+import { getStatsData } from "../../redux/slices/statSlice";
 
 ChartJS.register(
   ArcElement,

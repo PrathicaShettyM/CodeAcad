@@ -65,7 +65,7 @@ function HomeLayout({ children }){
                         {
                             isLoggedIn && role === "ADMIN" && (
                                 <li>
-                                    <Link to="/admin/create">Create Course</Link>
+                                    <Link to="/course/create" state={{ initialCourseData: { newCourse: true } }}>Create Course</Link>
                                 </li>
                             )
                         }

@@ -12,7 +12,9 @@ function Notfound(){
             <button className="mt-4">
             <Link to="/">
                 <a href="" className="relative inline-block text-sm font-medium text-[#ff6a3d] active:text-yellow-500 focus:outline-none">
-                    <span className="relative block px-8 py-3 bg-[#1a2238] border-2 border-current rounded">Go back</span>
+                    <span className="relative block px-8 py-3 bg-[#1a2238] border-2 border-current rounded">
+                        Go back
+                    </span>
                 </a>
             </Link>    
             </button>   

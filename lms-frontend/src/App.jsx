@@ -2,6 +2,7 @@ import './App.css'
 
 import { Route,Routes } from "react-router-dom";
 
+import NotRequireAuth from './Auth/NotRequireAuth';
 import RequireAuth from './Auth/RequireAuth';
 import Aboutus from './pages/Aboutus';
 import Contact from './pages/Contact';
@@ -9,6 +10,7 @@ import CourseDescription from './pages/Courses/CourseDescription';
 import CourseList from './pages/Courses/CourseList';
 import CreateCourse from './pages/Courses/CreateCourse';
 import AddLecture from './pages/Dashboard/AddLectures';
+import AdminDashboard from './pages/Dashboard/AdminDashBoard';
 import DisplayLectures from './pages/Dashboard/DisplayLectures';
 import Denied from './pages/Denied';
 import Home from './pages/Home';
@@ -38,8 +40,10 @@ function App() {
       <Route path='/forgetpassword' element={<ForgotPassword/> }/>
       <Route path='/denied' element={<Denied/>} />
 
-      <Route path='/signup' element={<Signup/>} />
-      <Route path='/signin' element={<Signin/>} />
+      <Route element={<NotRequireAuth />}>
+        <Route path='/signup' element={<Signup/>} />
+        <Route path='/signin' element={<Signin/>} />
+      </Route>
       
 
       <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
@@ -57,6 +61,7 @@ function App() {
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
           {/*admin dashboard pending*/}
+        <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
         <Route path='/course/addlecture' element={<AddLecture/>}/>
         <Route path='/course/create' element={<CreateCourse />}/>
       </Route>
