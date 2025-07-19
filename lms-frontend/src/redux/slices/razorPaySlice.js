@@ -28,8 +28,9 @@ export const purchaseCourseBundle = createAsyncThunk("/purchaseCourse", async (_
     const res = await axiosInstance.post("/payments/subscribe");
     return res.data;
   } catch (error) {
+    console.error("Razorpay Subscribe Error:", error);  // Add this
     return thunkAPI.rejectWithValue(error?.response?.data?.message || "Subscription failed");
-  }
+  } 
 });
 
 // ✅ 3. Verify Payment
@@ -88,11 +89,12 @@ const razorpaySlice = createSlice({
 
       // Purchase
       .addCase(purchaseCourseBundle.fulfilled, (state, action) => {
-        state.subscription_id = action?.payload?.subscription_id || "";
-      })
-      .addCase(purchaseCourseBundle.rejected, (_, action) => {
-        toast.error(action.payload || "Purchase failed");
-      })
+        if (action?.payload?.subscription_id) {
+            state.subscription_id = action.payload.subscription_id;
+          } else {
+            toast.error("No subscription ID returned");
+          }
+        })
 
       // Verify
       .addCase(verifyUserPayment.fulfilled, (state, action) => {

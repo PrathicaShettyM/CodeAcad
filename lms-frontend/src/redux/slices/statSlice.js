@@ -8,24 +8,22 @@ const initialState = {
   subscribedUsersCount: 0,
 };
 
-// function to get the stats data from backend
 export const getStatsData = createAsyncThunk("getstat", async () => {
   try {
-    const res = axiosInstance.get("/admin/stats/users");
-    toast.promise(res, {
+    const res = await axiosInstance.get("/admin/stats/users");
+    toast.promise(Promise.resolve(res), {
       loading: "Getting the stats...",
-      success: (data) => {
-        return data?.data?.message;
-      },
+      success: (data) => data?.data?.message,
       error: "Failed to load stats",
     });
 
-    const response = await res;
-    return response.data;
+    return res.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message);
+    toast.error(error?.response?.data?.message || "Failed to fetch stats");
+    throw error;
   }
 });
+
 
 const statSlice = createSlice({
   name: "stat",
@@ -36,8 +34,11 @@ const statSlice = createSlice({
       state.allUsersCount = action?.payload?.allUsersCount;
       state.subscribedUsersCount = action?.payload?.subscribedUsersCount;
     });
+    builder.addCase(getStatsData.rejected, (state) => {
+      state.allUsersCount = 0;
+      state.subscribedUsersCount = 0;
+    });
   },
 });
 
-export const {} = statSlice.actions;
 export default statSlice.reducer;

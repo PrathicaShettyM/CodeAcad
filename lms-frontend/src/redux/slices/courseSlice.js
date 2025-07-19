@@ -123,16 +123,17 @@ const courseSlice = createSlice({
         }
       })
       .addCase(updateCourse.fulfilled, (state, action) => {
-        const updatedCourse = action.payload?.course;
-        if (updatedCourse) {
-          const index = state.coursesData.findIndex(
-            (course) => course._id === updatedCourse._id
-          );
-          if (index !== -1) {
-            state.coursesData[index] = updatedCourse;
-          }
-        }
-      });
+      const updatedCourse = action.payload; 
+      if (updatedCourse) {
+        const index = state.coursesData.findIndex(
+        (course) => course._id === updatedCourse._id
+      );
+      if (index !== -1) {
+        state.coursesData[index] = updatedCourse;
+      }
+    }
+});
+
   },
 });
 

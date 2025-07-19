@@ -56,13 +56,10 @@ function App() {
 
         <Route path='/user/profile' element={<Profile/>}/>
         <Route path='/user/editprofile' element={<EditProfile/>}/>
-        <Route path='/course/displaylectures' element={<DisplayLectures />}/>
-
-
+        <Route path='/course/displaylectures' element={<DisplayLectures />} />
       </Route>
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
-          {/*admin dashboard pending*/}
         <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
         <Route path='/course/addlecture' element={<AddLecture/>}/>
         <Route path='/course/create' element={<CreateCourse />}/>
@@ -74,4 +71,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

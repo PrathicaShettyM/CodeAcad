@@ -6,38 +6,43 @@ import { Link } from "react-router-dom";
 import HomeLayout from "../../layout/HomeLayout";
 import { getUserData } from "../../redux/slices/authSlice";
 
-function CheckoutSuccess(){
+function CheckoutSuccess() {
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
-    
-    // to retain the state tht we have subscribed
-    useEffect(()=>{
-        dispatch(getUserData());
-    });
+  useEffect(() => {
+    dispatch(getUserData());
+  }, [dispatch]);
 
+  return (
+    <HomeLayout>
+      <div className="min-h-[90vh] flex items-center justify-center text-white">
+        <div className="w-80 h-[28rem] flex flex-col justify-between items-center shadow-[0_0_10px_black] rounded-lg relative bg-[#1f1f1f]">
+          {/* Top banner */}
+          <h1 className="bg-green-500 w-full py-4 text-2xl font-bold text-center rounded-t-lg">
+            Payment Successful
+          </h1>
 
-    return(
-        <HomeLayout>
-            <div className="min-h-[90vh] flex items-center justify-center text-white">
-                <div className="w-80 h-[26rem] flex flex-col justify-center items-center shadow-[0_0_10px_black] rounded-lg relative">
-                    <h1 className="bg-green-500 absolute text-center top-0 w-full py-4 text-2xl font-bold rounded-tl-lg rounded-tr-lg">
-                        Payment successfull
-                    </h1>
-                    <div className="px-4 flex flex-col items-center jsutify-center space-y-2">
-                        <h2 className="text-lg font-semibold">
-                            Welcome to pro bundle
-                        </h2>
-                        <p className="text-left">
-                            Now enjoy all the premium content
-                        </p>
-                    </div>
-                <AiFillCheckCircle className="text-5xl text-green-500 mt-2"/>
-                <Link to="/" className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full py-2 rounded-br-lg rounded-bl-lg">
-                    <button>Go to dashboard</button>
-                </Link>
-                </div>
-            </div>
-        </HomeLayout>
-    );
+          {/* Content */}
+          <div className="px-4 mt-4 flex flex-col items-center justify-center space-y-2">
+            <AiFillCheckCircle className="text-5xl text-green-500" />
+            <h2 className="text-lg font-semibold text-center">
+              Welcome to the Pro Bundle!
+            </h2>
+            <p className="text-sm text-center text-gray-300">
+              You now have access to all premium content.
+            </p>
+          </div>
+
+          {/* Bottom banner */}
+          <Link
+            to="/"
+            className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 w-full py-3 text-center text-white font-semibold rounded-b-lg"
+          >
+            Go to Dashboard
+          </Link>
+        </div>
+      </div>
+    </HomeLayout>
+  );
 }
 export default CheckoutSuccess;

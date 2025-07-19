@@ -18,6 +18,8 @@ function CourseDescription(){
         }
     }, [state]);
 
+    console.log("Redux role:", role);
+    console.log("Redux subscription status:", data?.subscription?.status);
 
     return(
     <HomeLayout>

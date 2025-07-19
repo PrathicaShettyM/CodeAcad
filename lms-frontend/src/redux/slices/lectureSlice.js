@@ -42,7 +42,7 @@ export const addCourseLecture = createAsyncThunk(
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
-      formData.append("file", lecture); // ✅ MATCHES upload.single('file')
+      formData.append("file", lecture); // <-- ✅ This must be "file" to match multer single('file')
 
       const res = await toast.promise(
         axiosInstance.post(`/courses/${id}`, formData, {
@@ -56,7 +56,7 @@ export const addCourseLecture = createAsyncThunk(
         }
       );
 
-      return res.data;
+      return res.data.course.lectures;
     } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message || "Failed to add lecture"
