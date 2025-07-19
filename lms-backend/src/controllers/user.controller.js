@@ -325,27 +325,48 @@ export const changePassword = asyncHandler(async (req, res, next) => {
     6. This is a update user controller 
        This goes as POST: {{URL}}/api/v1/user/:id
 */
+/*
+    6. This is a update user controller 
+       This goes as POST: {{URL}}/api/v1/user/:id
+*/
 export const updateUser = asyncHandler(async (req, res, next) => {
     // Destructuring the necessary data from the req object
     const { fullName } = req.body;
-    const {id} = req.params;
+    const { id } = req.params;
 
+    // Finding user by id
     const user = await User.findById(id);
     if (!user) {
         return next(new AppError('Invalid user id or user does not exist'));
     }
 
-    if(fullName){
+    // If fullName is provided, update it
+    if (fullName) {
         user.fullName = fullName;
     }
 
     // run this only when user changes his profile pic
-    if(req.file){
+    if (req.file) {
         // delete the old image uploaded by the user
         await cloudinary.v2.uploader.destroy(user.avatar.public_id);
 
         try {
-            
+            const result = await cloudinary.v2.uploader.upload(req.file.path, {
+                folder: 'code_acad', // save the files to a folder called code_acad
+                width: 250,
+                height: 250,
+                gravity: 'faces',
+                crop: 'fill',
+            });
+
+            if (result) {
+                // Set the new public_id and secure_url
+                user.avatar.public_id = result.public_id;
+                user.avatar.secure_url = result.secure_url;
+
+                // After successful upload remove the file from local storage
+                fs.rm(`uploads/${req.file.filename}`);
+            }
         } catch (error) {
             return next(new AppError(error || 'File not uploaded, please try again', 400));
         }

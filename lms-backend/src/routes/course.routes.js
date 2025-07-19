@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router } from 'express'; 
 import {
   addLectureToCourseById,
   createCourse,
@@ -17,22 +17,57 @@ import upload from '../middlewares/multer.middleware.js';
 
 const router = Router();
 
-router
-    .route('/')
-    .get(getAllCourses)
-    .post(
-        isLoggedIn,
-        authorizeRoles('ADMIN'),
-        upload.single('thumbnail'),
-        createCourse
-    )
-    .delete(isLoggedIn, authorizeRoles('ADMIN'), removeLectureFromCourse);
+// PUBLIC: get all courses
+router.route('/').get(getAllCourses);
 
-router
-    .route('/:id')
-    .get(isLoggedIn, authorizeSubscribers, getLecturesByCourseId)
-    .post(isLoggedIn, authorizeRoles('ADMIN'), upload.single('lecture'), addLectureToCourseById)
-    .put(isLoggedIn, authorizeRoles('ADMIN'), updateCourseById)
-    .delete(isLoggedIn, authorizeRoles('ADMIN'), deleteCourseById);
+// ADMIN: create new course
+router.post(
+  '/',
+  isLoggedIn,
+  authorizeRoles('ADMIN'),
+  upload.single("thumbnail"),
+  createCourse
+);
+
+// ADMIN: delete a course by ID
+router.delete(
+  '/:id',
+  isLoggedIn,
+  authorizeRoles('ADMIN'),
+  deleteCourseById
+);
+
+// SUBSCRIBER: get lectures in a course
+router.get(
+  '/:id',
+  isLoggedIn,
+  authorizeSubscribers,
+  getLecturesByCourseId
+);
+
+// ADMIN: add a lecture to course
+router.post(
+  '/:id',
+  isLoggedIn,
+  authorizeRoles('ADMIN'),
+  upload.single('lecture'),
+  addLectureToCourseById
+);
+
+// ADMIN: update a course
+router.put(
+  '/:id',
+  isLoggedIn,
+  authorizeRoles('ADMIN'),
+  updateCourseById
+);
+
+//  ADMIN: remove lecture from course (NEW ROUTE)
+router.delete(
+  '/:courseId/lectures/:lectureId',
+  isLoggedIn,
+  authorizeRoles('ADMIN'),
+  removeLectureFromCourse
+);
 
 export default router;

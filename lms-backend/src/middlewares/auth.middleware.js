@@ -6,7 +6,7 @@ import asyncHandler from './asyncHandler.middleware.js';
 // 1. Middleware to check if user "is Logged in" or not
 export const isLoggedIn = asyncHandler(async (req, _res, next) => {
     // extract token from cookies
-    const token = req.cookies;
+    const token = req.cookies.token;
 
     // If no token send unauthorized message
     if (!token) {
@@ -14,12 +14,8 @@ export const isLoggedIn = asyncHandler(async (req, _res, next) => {
     }
 
     // decoding the token using jwt verify method
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // if no decoded token, send unauthorized message
-    if(!decoded) {
-        return next(new AppError('Invalid token, Please login again', 401));
-    }
     // If token is valid, attach user info to request object
     req.user = decoded; 
     
@@ -40,7 +36,7 @@ export const authorizeRoles = (...roles) =>
     });
 
 // 3. Middleware to check if user is a active "Subscriber" or not
-export const authorizeSubscriers = asyncHandler(async (req, _res, next) => {
+export const authorizeSubscribers = asyncHandler(async (req, _res, next) => {
     // If user is not logged in, throw an error
     if (!req.user) {
         return next(new AppError('Unauthorized, Please login to continue', 401));

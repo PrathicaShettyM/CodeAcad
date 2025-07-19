@@ -1,33 +1,37 @@
 import path from "path";
-
 import multer from "multer";
+import fs from "fs";
 
-// file upload middleware using multer
+// ✅ Ensure 'uploads/' folder exists
+const uploadDir = "uploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+  destination: function (_req, _file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (_req, file, cb) {
+    const name = path.parse(file.originalname).name.replace(/\s+/g, "_");
+    const ext = path.extname(file.originalname).toLowerCase(); // normalize extension
+    cb(null, `${name}_${Date.now()}${ext}`);
+  },
+});
+
+const fileFilter = (_req, file, cb) => {
+  const ext = path.extname(file.originalname).toLowerCase();
+  const allowed = [".jpg", ".jpeg", ".webp", ".png"];
+  if (!allowed.includes(ext)) {
+    return cb(new Error(`Unsupported file type! ${ext}`), false);
+  }
+  cb(null, true);
+};
+
 const upload = multer({
-    dest: "uploads/",
-    limits: {fileSize: 50*1024*1024}, // max limit is 50mb
-    storage: multer.diskStorage({
-        destination: "uploads/",
-        filename: (_req, file, cb) => {
-            cb(null, file.originalname);
-        },
-    }),
-    fileFilter: (_req, file, cb) => {
-        let ext = path.extname(file.originalname);
-
-        // make sure onlu .jpg, .jpeg, .webp, .png, .mp4
-        if (
-            ext !== ".jpg" &&
-            ext !== ".jpeg" &&
-            ext !== ".webp" &&
-            ext !== ".png" &&
-            ext !== ".mp4" 
-        ) {
-            cb(new Error(`Unsupported file type! ${ext}`), false);
-        }
-
-        cb(null, true);
-    },
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB is better for thumbnails
+  storage,
+  fileFilter,
 });
 
 export default upload;

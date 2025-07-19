@@ -66,7 +66,7 @@ export const verifySubscription = asyncHandler(async (req, res, next) => {
     // razorpay_payment_id is from the frontend and  there shb be a '|' character between this and subscriptionId
     // at the end convert it to hex value
     const generatedSignature = crypto
-        .createHmac('sha256'. process.env.RAZORPAY_SECRET)
+        .createHmac('sha256', process.env.RAZORPAY_SECRET)
         .update(`${razorpay_payment_id}|${subscriptionId}`)
         .digest('hex');
 
