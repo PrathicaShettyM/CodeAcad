@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import AppError from "../utils/appError.js";
 import asyncHandler from './asyncHandler.middleware.js';
+import User from '../models/user.model.js';
 
 // 1. Middleware to check if user "is Logged in" or not
 export const isLoggedIn = asyncHandler(async (req, _res, next) => {
@@ -29,13 +30,20 @@ export const authorizeRoles = (...roles) =>
     });
 
 // 3. Middleware to check if user is a "SUBSCRIBER"
-export const authorizeSubscribers = (req, res, next) => {
+export const authorizeSubscribers = asyncHandler(async (req, _res, next) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("User not found", 401));
+  }
+
   if (
-    req.user.role === "ADMIN" ||
-    (req.user.subscription && req.user.subscription.status === "active")
+    user.role === "ADMIN" ||
+    (user.subscription && user.subscription.status === "active")
   ) {
     return next();
   }
-  return res.status(403).json({ message: "Access Denied. Please subscribe." });
-};
+
+  return next(new AppError("Access Denied. Please subscribe.", 403));
+});
 

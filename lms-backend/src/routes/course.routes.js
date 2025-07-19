@@ -45,12 +45,6 @@ router.get(
   getLecturesByCourseId
 );
 
-// router.get(
-//   '/:id',
-//   isLoggedIn,
-//   authorizeSubscribers,
-//   getLecturesByCourseId
-// );
 
 // ADMIN: add a lecture to course
 router.post(
