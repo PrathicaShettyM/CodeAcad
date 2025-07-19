@@ -12,10 +12,10 @@ import {
 function DisplayLectures() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { state } = useLocation();
+
   const { lectures } = useSelector((state) => state.lecture);
-  const { role } = useSelector((state) => state.auth);
+  const { role, data } = useSelector((state) => state.auth);
 
   const [currentVideo, setCurrentVideo] = useState(0);
 
@@ -25,8 +25,14 @@ function DisplayLectures() {
       return;
     }
 
+    // check subscription status if not admin
+    if (role !== "ADMIN" && data?.subscription?.status !== "active") {
+      navigate("/denied");
+      return;
+    }
+
     dispatch(getCourseLecture(state._id));
-  }, [state, dispatch, navigate]);
+  }, [state, dispatch, navigate, role, data]);
 
   const onLectureDelete = async (cid, lid) => {
     await dispatch(deleteCourseLecture({ courseId: cid, lectureId: lid }));
@@ -38,7 +44,7 @@ function DisplayLectures() {
   return (
     <HomeLayout>
       <div className="min-h-screen w-full px-[5%] py-6 text-white">
-        {/* Fixed Header */}
+        {/* Header */}
         <div className="sticky top-0 z-10 bg-white bg-opacity-10 backdrop-blur-md p-4 rounded-lg flex justify-between items-center shadow-md">
           <h1 className="text-3xl font-bold text-yellow-500">
             Course: {state?.title}
@@ -56,9 +62,9 @@ function DisplayLectures() {
           )}
         </div>
 
-        {/* Video and Lectures */}
+        {/* Content */}
         <div className="flex flex-col md:flex-row gap-10 mt-6">
-          {/* Fixed Video Player */}
+          {/* Video Player */}
           <div className="md:w-[65%] sticky top-[100px] bg-white bg-opacity-5 backdrop-blur-md rounded-xl p-4 shadow-lg">
             <video
               src={
@@ -83,9 +89,11 @@ function DisplayLectures() {
             </div>
           </div>
 
-          {/* Scrollable Lectures List */}
+          {/* Lecture List */}
           <div className="md:w-[35%] max-h-[calc(100vh-150px)] overflow-y-auto p-4 rounded-xl border border-white bg-white bg-opacity-5 backdrop-blur-md shadow-md">
-            <h2 className="text-yellow-400 text-xl font-bold mb-4">Lectures List</h2>
+            <h2 className="text-yellow-400 text-xl font-bold mb-4">
+              Lectures List
+            </h2>
 
             {lectures.length > 0 ? (
               lectures.map((lecture, idx) => (

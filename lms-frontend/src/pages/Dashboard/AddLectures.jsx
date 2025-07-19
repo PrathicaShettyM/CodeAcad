@@ -50,7 +50,7 @@ function AddLecture() {
     }
   }
 
-async function onFormSubmit(e) {
+  async function onFormSubmit(e) {
   e.preventDefault();
   const { lecture, title, description, id } = userInput;
 
@@ -62,10 +62,27 @@ async function onFormSubmit(e) {
   const res = await dispatch(addCourseLecture({ id, title, description, lecture }));
 
   if (res?.payload?.success) {
-    toast.success("Lecture added!");
-    navigate(-1);
+    toast.success("Lecture added successfully!");
+
+    // Reset form after success
+    setUserInput({
+      id,
+      lecture: null,
+      title: "",
+      description: "",
+      videoSrc: ""
+    });
+
+    // Optional: trigger video cleanup
+    URL.revokeObjectURL(userInput.videoSrc);
+
+    // stay on same page — already handled
   } else {
-    toast.error(res?.payload || "Failed to add lecture");
+    toast.error(
+      typeof res?.payload === "string"
+        ? res.payload
+        : res?.payload?.message || "Failed to add lecture"
+    );
   }
 }
 
@@ -77,7 +94,7 @@ async function onFormSubmit(e) {
           <header className="flex items-center justify-center relative">
             <button
               className="absolute left-2 text-xl text-green-500"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/admin/dashboard")}
             >
               <AiOutlineArrowLeft />
             </button>
@@ -127,7 +144,10 @@ async function onFormSubmit(e) {
               </div>
             )}
 
-            <button type="submit" className="btn-primary py-1 text-lg font-semibold bg-green-500">
+            <button
+              type="submit"
+              className="btn-primary py-1 text-lg font-semibold bg-green-500"
+            >
               Add new lecture
             </button>
           </form>
