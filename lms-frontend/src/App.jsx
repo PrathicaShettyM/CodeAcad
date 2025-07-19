@@ -15,7 +15,9 @@ import DisplayLectures from './pages/Dashboard/DisplayLectures';
 import Denied from './pages/Denied';
 import Home from './pages/Home';
 import Notfound from './pages/Notfound';
+import ChangePassword from './pages/Password/ChangePassword';
 import ForgotPassword from './pages/Password/ForgetPassword';
+import ResetPassword from './pages/Password/ResetPassword';
 import Checkout from './pages/Payment/Checkout';
 import CheckoutFailure from './pages/Payment/CheckoutFailure';
 import CheckoutSuccess from './pages/Payment/CheckoutSuccess';
@@ -34,11 +36,9 @@ function App() {
       <Route path='/aboutus' element={<Aboutus/> }/>
       <Route path='/denied' element={<Denied/>} />
 
-      {/*forget password not there*/}
-      {/*reset token not there*/}
       
       <Route path='/forgetpassword' element={<ForgotPassword/> }/>
-      <Route path='/denied' element={<Denied/>} />
+      <Route path='/reset-password/:resetToken' element={<ResetPassword />} />
 
       <Route element={<NotRequireAuth />}>
         <Route path='/signup' element={<Signup/>} />
@@ -47,16 +47,18 @@ function App() {
       
 
       <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
-        <Route path='/course/description' element={<CourseDescription />}/>
+        <Route path='/courses/description' element={<CourseDescription />}/>
         <Route path='/checkout' element={<Checkout />}/>
         <Route path='/checkout/success' element={<CheckoutSuccess />}/>
         <Route path='/checkout/fail' element={<CheckoutFailure />}/>
-        
-        {/*change password pending*/}
-        
+
+        <Route path='/user/changepassword' element={<ChangePassword />} />
+
         <Route path='/user/profile' element={<Profile/>}/>
         <Route path='/user/editprofile' element={<EditProfile/>}/>
         <Route path='/course/displaylectures' element={<DisplayLectures />}/>
+
+
       </Route>
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>

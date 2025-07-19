@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaPlayCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -25,7 +26,7 @@ function DisplayLectures() {
     }
 
     dispatch(getCourseLecture(state._id));
-  }, [state, dispatch]);
+  }, [state, dispatch, navigate]);
 
   const onLectureDelete = async (cid, lid) => {
     await dispatch(deleteCourseLecture({ courseId: cid, lectureId: lid }));
@@ -36,83 +37,88 @@ function DisplayLectures() {
 
   return (
     <HomeLayout>
-      <div className="flex flex-col gap-10 items-center min-h-[90vh] py-10 text-white mx-[5%]">
-        <div className="text-center text-2xl font-semibold text-yellow-500">
-          Course Name: {state?.title}
+      <div className="min-h-screen w-full px-[5%] py-6 text-white">
+        {/* Fixed Header */}
+        <div className="sticky top-0 z-10 bg-white bg-opacity-10 backdrop-blur-md p-4 rounded-lg flex justify-between items-center shadow-md">
+          <h1 className="text-3xl font-bold text-yellow-500">
+            Course: {state?.title}
+          </h1>
+
+          {role === "ADMIN" && (
+            <button
+              onClick={() =>
+                navigate("/course/addlecture", { state: { ...state } })
+              }
+              className="btn-primary px-4 py-2 rounded-md font-semibold bg-green-500 hover:bg-green-400 transition"
+            >
+              Add new lecture
+            </button>
+          )}
         </div>
 
-        {role === "ADMIN" && (
-          <div className="w-full flex justify-end mb-4">
-            <button
-              onClick={() => navigate("/course/addlecture", { state: { ...state } })}
-              className="btn-primary px-4 py-2 rounded-md font-semibold"
-            >
-              ➕ Add new lecture
-            </button>
-          </div>
-        )}
-
-        {lectures && lectures.length > 0 ? (
-          <div className="flex justify-center gap-10 w-full">
-            {/* Left Panel: Video */}
-            <div>
-              <div className="space-y-5 w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black]">
-                <video
-                  src={
-                    lectures[currentVideo]?.lecture?.secure_url ||
-                    lectures[currentVideo]?.secure_url
-                  }
-                  className="object-fill rounded-tl-lg w-full rounded-tr-lg"
-                  controls
-                  disablePictureInPicture
-                  controlsList="nodownload"
-                  muted
-                />
-                <h1>
-                  <span className="text-yellow-500">Title: </span>
-                  {lectures[currentVideo]?.title}
-                </h1>
-                <p>
-                  <span className="text-yellow-500">Description: </span>
-                  {lectures[currentVideo]?.description}
-                </p>
-              </div>
+        {/* Video and Lectures */}
+        <div className="flex flex-col md:flex-row gap-10 mt-6">
+          {/* Fixed Video Player */}
+          <div className="md:w-[65%] sticky top-[100px] bg-white bg-opacity-5 backdrop-blur-md rounded-xl p-4 shadow-lg">
+            <video
+              src={
+                lectures[currentVideo]?.lecture?.secure_url ||
+                lectures[currentVideo]?.secure_url
+              }
+              className="w-full h-[400px] object-contain rounded-md"
+              controls
+              disablePictureInPicture
+              controlsList="nodownload"
+              muted
+            />
+            <div className="mt-4 space-y-2">
+              <h2>
+                <span className="text-yellow-500 font-semibold">Title: </span>
+                {lectures[currentVideo]?.title}
+              </h2>
+              <p>
+                <span className="text-yellow-500 font-semibold">Description: </span>
+                {lectures[currentVideo]?.description}
+              </p>
             </div>
+          </div>
 
-            {/* Right Panel: List */}
-            <ul className="w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black] space-y-5">
-              <li className="font-semibold text-xl text-yellow-500">
-                Lectures List
-              </li>
+          {/* Scrollable Lectures List */}
+          <div className="md:w-[35%] max-h-[calc(100vh-150px)] overflow-y-auto p-4 rounded-xl border border-white bg-white bg-opacity-5 backdrop-blur-md shadow-md">
+            <h2 className="text-yellow-400 text-xl font-bold mb-4">Lectures List</h2>
 
-              {lectures.map((lecture, idx) => (
-                <li className="space-y-2" key={lecture._id}>
-                  <p
-                    className="cursor-pointer"
+            {lectures.length > 0 ? (
+              lectures.map((lecture, idx) => (
+                <div className="mb-4" key={lecture._id}>
+                  <button
+                    className="flex items-center gap-2 text-left text-white font-medium hover:text-yellow-300 transition"
                     onClick={() => setCurrentVideo(idx)}
                   >
-                    <span>Lecture {idx + 1}: </span> {lecture?.title}
-                  </p>
+                    <FaPlayCircle className="text-yellow-400" />
+                    <span>
+                      Lecture {idx + 1}: {lecture?.title}
+                    </span>
+                  </button>
+
                   {role === "ADMIN" && (
                     <button
-                      onClick={() =>
-                        onLectureDelete(state._id, lecture._id)
-                      }
-                      className="btn-accent px-2 py-1 rounded-md font-semibold text-sm"
+                      onClick={() => onLectureDelete(state._id, lecture._id)}
+                      className="px-3 py-1 text-yellow-400 hover:text-yellow-300 text-sm font-semibold"
                     >
                       Delete lecture
                     </button>
                   )}
-                </li>
-              ))}
-            </ul>
+                </div>
+              ))
+            ) : (
+              <p className="text-yellow-300">
+                No lectures found.{" "}
+                {role === "ADMIN" &&
+                  "Click the 'Add new lecture' button above to add one."}
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="text-yellow-300 text-lg">
-            No lectures found.{" "}
-            {role === "ADMIN" && "Click the 'Add new lecture' button above to add one."}
-          </p>
-        )}
+        </div>
       </div>
     </HomeLayout>
   );

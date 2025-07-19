@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../../layout/HomeLayout";
 import { getUserData } from "../../redux/slices/authSlice";
-import { cancelCourseBundle } from "../../redux/slices/razorPaySlice";
+import { cancelCourseBundle } from "../../redux/slices/razorpaySlice";
 
 function Profile(){
     // fetch userdata
@@ -37,7 +37,7 @@ function Profile(){
 
                     <div className="flex items-center justify-between gap-2">
                         <Link
-                            to="/changepassword"
+                            to="/user/changepassword"
                             className="w-1/2 bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm font-semibold cursor-pointer text-center py-1"
                         >
                         <button>Change Password</button>

@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 
 import Layout from "../../layout/HomeLayout";
 import { deleteCourse, getAllCourses } from "../../redux/slices/courseSlice";
-import { getPaymentRecord } from "../../redux/slices/razorPaySlice";
+import { getPaymentRecord } from "../../redux/slices/razorpaySlice";
 import { getStatsData } from "../../redux/slices/statSlice";
 
 ChartJS.register(
@@ -233,14 +233,15 @@ const AdminDashboard = () => {
                       ></textarea>
                     </td>
                     <td>{element?.category}</td>
+                    
                     <td>{element?.createdBy}</td>
+                    
                     <td>{element?.numberOfLectures}</td>
-                    <td className="max-w-28 overflow-hidden text-ellipsis whitespace-nowrap">
-                      <textarea
-                        readOnly
-                        className="w-80 h-auto bg-transparent resize-none"
-                        value={element?.description}
-                      ></textarea>
+                    
+                    <td className="max-w-xs">
+                        <p className="line-clamp-3 whitespace-pre-line break-words text-sm text-gray-200">
+                          {element?.description}
+                        </p>
                     </td>
 
                     <td className="flex items-center gap-4">

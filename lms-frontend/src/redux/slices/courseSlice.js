@@ -71,34 +71,38 @@ export const deleteCourse = createAsyncThunk("/course/delete", async (id, { reje
 });
 
 // function to update the course details
-export const updateCourse = createAsyncThunk("/course/update", async (data, { rejectWithValue }) => {
-  try {
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("category", data.category);
-    formData.append("createdBy", data.createdBy);
-    formData.append("description", data.description);
-    if (data.thumbnail) {
-      formData.append("thumbnail", data.thumbnail);
+export const updateCourse = createAsyncThunk(
+  "course/updateCourse",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const courseId = formData.get("courseId");
+
+      if (!courseId) {
+        return rejectWithValue("Course ID is missing for update.");
+      }
+
+      const res = await toast.promise(
+        axiosInstance.put(`/courses/${courseId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }),
+        {
+          loading: "Updating course...",
+          success: "Course updated successfully",
+          error: "Failed to update course",
+        }
+      );
+
+      return res.data.course;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || "Update failed");
     }
-
-    const resPromise = axiosInstance.put(`/courses/${data.id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    toast.promise(resPromise, {
-      loading: "Updating the course...",
-      success: "Course updated successfully",
-      error: "Failed to update course",
-    });
-
-    const response = await resPromise;
-    return response.data;
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Something went wrong");
-    return rejectWithValue(error?.response?.data);
   }
-});
+);
+
+
 
 const courseSlice = createSlice({
   name: "course",

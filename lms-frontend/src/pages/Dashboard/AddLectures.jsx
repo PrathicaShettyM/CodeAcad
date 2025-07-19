@@ -73,7 +73,7 @@ async function onFormSubmit(e) {
   return (
     <HomeLayout>
       <div className="min-h-[90vh] text-white flex flex-col items-center justify-center gap-10 mx-15">
-        <div className="flex flex-col gap-5 p-2 shadow-[0_0_10px_black] w-96 rounded-lg">
+        <div className="flex flex-col gap-5 p-2 shadow-[0_0_10px_black] w-96 rounded-lg px-4">
           <header className="flex items-center justify-center relative">
             <button
               className="absolute left-2 text-xl text-green-500"
@@ -127,7 +127,7 @@ async function onFormSubmit(e) {
               </div>
             )}
 
-            <button type="submit" className="btn-primary py-1 text-lg font-semibold">
+            <button type="submit" className="btn-primary py-1 text-lg font-semibold bg-green-500">
               Add new lecture
             </button>
           </form>
