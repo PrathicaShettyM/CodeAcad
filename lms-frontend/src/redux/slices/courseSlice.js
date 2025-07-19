@@ -8,21 +8,21 @@ const initialState = {
 };
 
 // function to get all courses
-export const getAllCourses = createAsyncThunk("/course/get", async () => {
+export const getAllCourses = createAsyncThunk("/course/get", async (_, { rejectWithValue }) => {
   try {
-    const res = axiosInstance.get("/courses");
+    const resPromise = axiosInstance.get("/courses");
 
-    toast.promise(res, {
+    toast.promise(resPromise, {
       loading: "Loading courses data...",
       success: "Courses loaded successfully",
       error: "Failed to get courses",
     });
 
-    const response = await res;
-
+    const response = await resPromise;
     return response.data.courses;
   } catch (error) {
-    toast.error(error?.response?.data?.message);
+    toast.error(error?.response?.data?.message || "Something went wrong");
+    return rejectWithValue(error?.response?.data);
   }
 });
 
@@ -51,58 +51,52 @@ export const createNewCourse = createAsyncThunk(
   }
 );
 
-
 // function to delete the course
-export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
+export const deleteCourse = createAsyncThunk("/course/delete", async (id, { rejectWithValue }) => {
   try {
-    const res = axiosInstance.delete(`courses/${id}`);
+    const resPromise = axiosInstance.delete(`/courses/${id}`);
 
-    toast.promise(res, {
+    toast.promise(resPromise, {
       loading: "Deleting the course...",
-      success: "Courses deleted successfully",
+      success: "Course deleted successfully",
       error: "Failed to delete course",
     });
 
-    const response = await res;
-
-    return response.data;
+    const response = await resPromise;
+    return { success: true, id };
   } catch (error) {
-    toast.error(error?.response?.data?.message);
+    toast.error(error?.response?.data?.message || "Something went wrong");
+    return rejectWithValue(error?.response?.data);
   }
 });
 
 // function to update the course details
-export const updateCourse = createAsyncThunk("/course/update", async (data) => {
+export const updateCourse = createAsyncThunk("/course/update", async (data, { rejectWithValue }) => {
   try {
-    // creating the form data from user data
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("category", data.category);
     formData.append("createdBy", data.createdBy);
     formData.append("description", data.description);
-    // backend is not allowing change of thumbnail
-    // if (data.thumbnail) {
-    //   formData.append("thumbnail", data.thumbnail);
-    // }
+    if (data.thumbnail) {
+      formData.append("thumbnail", data.thumbnail);
+    }
 
-    const res = axiosInstance.put(`/courses/${data.id}`, {
-      title: data.title,
-      category: data.category,
-      createdBy: data.createdBy,
-      description: data.description,
+    const resPromise = axiosInstance.put(`/courses/${data.id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
-    toast.promise(res, {
+    toast.promise(resPromise, {
       loading: "Updating the course...",
       success: "Course updated successfully",
       error: "Failed to update course",
     });
 
-    const response = await res;
+    const response = await resPromise;
     return response.data;
   } catch (error) {
-    console.log(error);
-    toast.error(error?.response?.data?.message);
+    toast.error(error?.response?.data?.message || "Something went wrong");
+    return rejectWithValue(error?.response?.data);
   }
 });
 
@@ -111,11 +105,30 @@ const courseSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllCourses.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.coursesData = [...action.payload];
-      }
-    });
+    builder
+      .addCase(getAllCourses.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.coursesData = [...action.payload];
+        }
+      })
+      .addCase(deleteCourse.fulfilled, (state, action) => {
+        if (action.payload?.success) {
+          state.coursesData = state.coursesData.filter(
+            (course) => course._id !== action.payload.id
+          );
+        }
+      })
+      .addCase(updateCourse.fulfilled, (state, action) => {
+        const updatedCourse = action.payload?.course;
+        if (updatedCourse) {
+          const index = state.coursesData.findIndex(
+            (course) => course._id === updatedCourse._id
+          );
+          if (index !== -1) {
+            state.coursesData[index] = updatedCourse;
+          }
+        }
+      });
   },
 });
 
