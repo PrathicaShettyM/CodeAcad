@@ -40,10 +40,11 @@ router.delete(
 // SUBSCRIBER: get lectures in a course
 router.get(
   '/:id',
-  isLoggedIn,
-  authorizeRoles("Subscriber", "ADMIN"),
+  isLoggedIn, 
+  authorizeSubscribers,
   getLecturesByCourseId
 );
+
 // router.get(
 //   '/:id',
 //   isLoggedIn,
