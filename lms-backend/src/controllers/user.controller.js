@@ -325,10 +325,6 @@ export const changePassword = asyncHandler(async (req, res, next) => {
     6. This is a update user controller 
        This goes as POST: {{URL}}/api/v1/user/:id
 */
-/*
-    6. This is a update user controller 
-       This goes as POST: {{URL}}/api/v1/user/:id
-*/
 export const updateUser = asyncHandler(async (req, res, next) => {
     // Destructuring the necessary data from the req object
     const { fullName } = req.body;
